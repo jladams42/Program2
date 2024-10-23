@@ -5,10 +5,11 @@
 //using namespace std;
 
 // Constructor for Task
-Task::Task(std::string desc) : description(desc), next(nullptr) {}
+// template <typename T>
+// Task<T>::Task(T desc) : description(desc), next(nullptr) {}
 
-// Constructor for ToDoList
-ToDoList::ToDoList() : head(nullptr) {}
+// // Constructor for ToDoList
+// ToDoList::ToDoList() : head(nullptr) {}
 
 // Destructor to free memory
 ToDoList::~ToDoList() {
@@ -46,12 +47,12 @@ void ToDoList::saveToFile(const std::string& fileName, const std::string& descri
 
 // Function to add a new task to the linked list
 void ToDoList::addTask(const std::string& description) {
-    Task* newTask = new Task(description);
+    Task<std::string>* newTask = new Task<std::string>(description);
 
     if (head == nullptr) {
         head = newTask;
     } else {
-        Task* temp = head;
+        Task<std::string>* temp = head;
         while (temp->next != nullptr) {
             temp = temp->next;
         }
@@ -61,7 +62,7 @@ void ToDoList::addTask(const std::string& description) {
 
 // Function to display the linked list
 void ToDoList::display() const {
-    Task* temp = head;
+    Task<std::string>* temp = head;
     if (temp == nullptr) {
         std::cout << "Your to-do list is empty!" << std::endl;
         return;
@@ -75,7 +76,7 @@ void ToDoList::display() const {
 // Function to clear the linked list and free memory
 void ToDoList::clear() {
     while (head != nullptr) {
-        Task* temp = head;
+        Task<std::string>* temp = head;
         head = head->next;
         delete temp;
     }

@@ -3,20 +3,20 @@
 #include <string>
 
 //using namespace std;
-
+template <typename T>
 struct Task {
-    std::string description;
+    T description;
     Task* next;
 
-    Task(std::string desc); // Constructor for Task
+    Task(T desc) : description(desc), next(nullptr) {}; // Constructor for Task
 };
 
 class ToDoList {
 private:
-    Task* head;
+    Task<std::string>* head;
 
 public:
-    ToDoList();          // Constructor
+    ToDoList() : head(nullptr) {};          // Constructor
     ~ToDoList();         // Destructor
 
     void loadFromFile(const std::string& fileName);        // Load tasks from file
