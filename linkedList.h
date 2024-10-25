@@ -20,8 +20,9 @@ public:
     ~ToDoList();         // Destructor
 
     void loadFromFile(const std::string& fileName);        // Load tasks from file
-    void saveToFile(const std::string& fileName, const std::string& description); // Save task to file
+    void saveToFile(const std::string& fileName); // Save task to file
     void addTask(const std::string& description);          // Add a task to the list
+    void searchTasks();
     void display() const;                             // Display the list
     void clear();                                     // Clear the list
 };

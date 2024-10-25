@@ -18,7 +18,7 @@ ToDoList::~ToDoList() {
 
 // Function to load tasks from file into the linked list
 void ToDoList::loadFromFile(const std::string& fileName) {
-    std::ifstream inFile("todolist.txt");
+    std::ifstream inFile(fileName);
     if (!inFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
@@ -33,16 +33,23 @@ void ToDoList::loadFromFile(const std::string& fileName) {
 }
 
 // Function to save the linked list to a file (append mode)
-void ToDoList::saveToFile(const std::string& fileName, const std::string& description) {
-    std::ofstream outFile(fileName, std::ios::app);
+void ToDoList::saveToFile(const std::string& fileName) {
+    std::ofstream outFile(fileName);
+
     if (!outFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
 
-    outFile << description << std::endl;
+    Task<std::string>* current = head;
+
+    while (current != nullptr) {
+        outFile << current->description << std::endl;
+        current = current->next;
+    }
 
     outFile.close();
+    std::cout << "Tasks have been saved!" << std::endl;
 }
 
 // Function to add a new task to the linked list
@@ -67,6 +74,8 @@ void ToDoList::display() const {
         std::cout << "Your to-do list is empty!" << std::endl;
         return;
     }
+    std::cout << "\n=============\n";
+    std::cout << "\nTODO LIST\n";
     while (temp != nullptr) {
         std::cout << "- " << temp->description << std::endl;
         temp = temp->next;
@@ -81,3 +90,40 @@ void ToDoList::clear() {
         delete temp;
     }
 }
+
+void ToDoList::searchTasks() {
+    if (head == nullptr) {
+        std::cout << "The task list is empty." << std::endl;
+        return;
+    }
+
+    Task<std::string>* current = head;
+    Task<std::string>* prev = nullptr;
+
+    while (current != nullptr) {
+        std::cout << "Task: " << current->description << std::endl;
+        std::cout << "Do you wish to delete this task? (y/n): ";
+        char response;
+        std:: cin >> response;
+
+        if (response == 'y' || response == 'Y') {
+            if(prev == nullptr){
+                // For if the head needs deletion
+                head = current->next;
+                delete current;
+                current = head;
+            } else {
+                // Middle or the last task deletion
+                prev->next = current->next;
+                delete current;
+                current = prev->next;
+            }
+            std::cout << "Task deleted." << std::endl;
+        } else {
+            // Move on to the next task
+            prev = current;
+            current = current->next;
+        }
+    }
+}
+

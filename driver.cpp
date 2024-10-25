@@ -48,7 +48,7 @@ int main() {
                     lists.saveToFile("lists.txt", listName);
                     activeList = listName;
                 } else {
-                    todo.loadFromFile(listName + ".txt");
+                    lists.loadFromFile(listName + ".txt");
                     activeList = listName;
                 }
                 break;
@@ -66,12 +66,13 @@ int main() {
                 getline(cin, task);
                 todo.loadFromFile(activeList + ".txt");
                 todo.addTask(task);
-                todo.saveToFile(activeList + ".txt", task);
+                todo.saveToFile(activeList + ".txt");
                 break;
             }
 
             case 4: {
-                
+                todo.searchTasks();
+                todo.saveToFile(activeList + ".txt");
                 break;
             }
 

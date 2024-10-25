@@ -92,7 +92,7 @@ bool DataList::searchList(std::string search) {
 
     while (current != nullptr) {
         if (current->title == search) {
-            cout << "This list matches!" << current->title << endl;
+            cout << "This list matches your list " << current->title << endl;
             found = true;
         }
         current = current->next;
