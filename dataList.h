@@ -5,15 +5,28 @@
 
 using namespace std;
 
+template <typename T>
+struct List {
+    T title;
+    List* next;
+
+    List(T title) : title(title), next(nullptr) {};
+};
+
 class DataList {
 private:
-    string** items;
-    int size;
+    List<std::string>* head;
 
 public:
-    DataList(string filename);
+    DataList() : head (nullptr) {};
     ~DataList();
-    void getItems(string filename);
+
+    void loadFromFile(const std::string& fileName);     
+    void saveToFile(const std::string& fileName, const std::string& title);
+    void addList(const std::string& title);
+    bool searchList(std::string search);       
+    void display() const;            
+    void clear();   
 };
 
 #endif
