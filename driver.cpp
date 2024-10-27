@@ -55,24 +55,36 @@ int main() {
             }
 
             case 2: {
-                todo.loadFromFile(activeList + ".txt");
-                todo.display();
+                if(!activeList.empty()) {
+                    todo.loadFromFile(activeList + ".txt");
+                    todo.display();
+                } else {
+                    cout << "\nYou have no list selected! Please choose a list.\n";
+                }
                 break;
             }
 
             case 3: {
-                string task;
-                cout << "What task would you like to add?\n";
-                getline(cin, task);
-                todo.loadFromFile(activeList + ".txt");
-                todo.addTask(task);
-                todo.saveToFile(activeList + ".txt");
+                if(!activeList.empty()) {
+                    string task;
+                    cout << "What task would you like to add?\n";
+                    getline(cin, task);
+                    todo.loadFromFile(activeList + ".txt");
+                    todo.addTask(task);
+                    todo.saveToFile(activeList + ".txt");
+                } else {
+                    cout << "\nYou have no list selected! Please choose a list.\n";
+                }
                 break;
             }
 
             case 4: {
-                todo.searchTasks();
-                todo.saveToFile(activeList + ".txt");
+                if(!activeList.empty()) {
+                    todo.searchTasks();
+                    todo.saveToFile(activeList + ".txt");
+                } else {
+                    cout << "\nYou have no list selected! Please choose a list.\n";
+                }
                 break;
             }
 
