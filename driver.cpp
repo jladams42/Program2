@@ -9,8 +9,9 @@ void displayMenu() {
     cout << "1. Choose List\n";
     cout << "2. View List\n";
     cout << "3. Add Task\n";
-    cout << "4. Remove Taks\n";
-    cout << "5. Exit\n";
+    cout << "4. Complete Task\n";
+    cout << "5. Delete Task\n";
+    cout << "6. Exit\n";
     cout << "================================================\n";
     cout << "Choose an option from the menu: ";
 }
@@ -56,7 +57,9 @@ int main() {
 
             case 2: {
                 if(!activeList.empty()) {
+                    cout << "Sorting list by priority...\n" << endl;
                     todo.loadFromFile(activeList + ".txt");
+                    quickSort(todo);
                     todo.display();
                 } else {
                     cout << "\nYou have no list selected! Please choose a list.\n";
@@ -84,7 +87,7 @@ int main() {
 
             case 4: {
                 if(!activeList.empty()) {
-                    todo.searchTasks();
+                    todo.completeTask();
                     todo.saveToFile(activeList + ".txt");
                 } else {
                     cout << "\nYou have no list selected! Please choose a list.\n";
@@ -92,7 +95,18 @@ int main() {
                 break;
             }
 
+
             case 5: {
+                if(!activeList.empty()) {
+                    todo.deleteTask();
+                    todo.saveToFile(activeList + ".txt");
+                } else {
+                    cout << "\nYou have no list selected! Please choose a list.\n";
+                }
+                break;
+            }
+
+            case 6: {
                 inUse = false;
                 break;
             }

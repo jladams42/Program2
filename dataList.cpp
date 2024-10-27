@@ -110,7 +110,7 @@ void ToDoList::clear() {
     }
 }
 
-void ToDoList::searchTasks() {
+void ToDoList::deleteTask() {
     if (head == nullptr) {
         std::cout << "The task list is empty." << std::endl;
         return;
@@ -146,3 +146,82 @@ void ToDoList::searchTasks() {
     }
 }
 
+void ToDoList::completeTask() {
+    if (head == nullptr) {
+        std::cout << "The task list is empty." << std::endl;
+        return;
+    }
+
+    Task<std::string>* current = head;
+
+    while (current != nullptr) {
+        std::cout << "Task: " << current->description << std::endl;
+        std::cout << "Current Status: " << current->status << std::endl;
+        std::cout << "Mark this task completed? (y/n): ";
+        char response;
+        std:: cin >> response;
+
+        if (response == 'y' || response == 'Y') {
+            current->status =  "Complete";
+            std::cout << "Task status updated to Complete!" << std::endl;
+        }
+
+        current = current->next;
+    }
+}
+
+void quickSort(ToDoList& list) {
+    list.head = list.quickSortRecurse(list.head, list.getTail(list.head));
+}
+
+Task<std::string>* ToDoList::getTail(Task<std::string>* node) {
+    while (node && node->next) {
+        node = node->next;
+    }
+    return node;
+}
+
+Task<std::string>* ToDoList::partition(Task<std::string>* low, Task<std::string>* high, Task<std::string>** newHead, Task<std::string>** newEnd) {
+    Task<std::string>* pivot = high;
+    Task<std::string>* prev = nullptr, *cur = low, *tail = pivot;
+
+    while(cur != pivot) {
+        if (*cur < *pivot) {
+            if (!*newHead) *newHead = cur;
+            prev = cur;
+            cur = cur->next;
+        } else {
+            if (prev) prev->next = cur->next;
+            Task<std::string>* temp = cur->next;
+            cur->next = nullptr;
+            tail->next = cur;
+            tail = cur;
+            cur = temp;
+        }
+    }
+    if (!*newHead) *newHead = pivot;
+    *newEnd = tail;
+    return pivot;
+}
+
+Task<std::string>* ToDoList::quickSortRecurse(Task<std::string>* head, Task<std::string>* end) {
+    if (!head || head == end){
+        return head;
+    }
+
+    Task<std::string> *newHead = nullptr, *newEnd = nullptr;
+    Task<std::string>* pivot = partition(head, end, &newHead, &newEnd);
+
+    if (newHead != pivot) {
+        Task<std::string>* temp = newHead;
+        while (temp->next != pivot) temp = temp->next;
+        temp->next = nullptr;
+
+        newHead = quickSortRecurse(newHead, temp);
+        temp = getTail(newHead);
+        temp->next = pivot; 
+    }
+
+    pivot->next = quickSortRecurse(pivot->next, newEnd);
+    return newHead;
+}
