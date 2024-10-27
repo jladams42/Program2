@@ -1,31 +1,35 @@
-#include <iostream>
-#include <fstream>
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
+
 #include <string>
 
-//using namespace std;
-template <typename T>
-struct Task {
-    T description;
-    Task* next;
+using namespace std;
 
-    Task(T desc) : description(desc), next(nullptr) {}; // Constructor for Task
-    bool operator==(const Task& other) const {
-        return description == other.description;
+template <typename T>
+struct List {
+    T title;
+    List* next;
+
+    List(T title) : title(title), next(nullptr) {};
+    bool operator==(const List& other) const {
+        return title == other.title;
     }
 };
 
-class ToDoList {
+class DataList {
 private:
-    Task<std::string>* head;
+    List<std::string>* head;
 
 public:
-    ToDoList() : head(nullptr) {};          // Constructor
-    ~ToDoList();         // Destructor
+    DataList() : head (nullptr) {};
+    ~DataList();
 
-    void loadFromFile(const std::string& fileName);        // Load tasks from file
-    void saveToFile(const std::string& fileName); // Save task to file
-    void addTask(const std::string& description);          // Add a task to the list
-    void searchTasks();
-    void display() const;                             // Display the list
-    void clear();                                     // Clear the list
+    void loadFromFile(const std::string& fileName);     
+    void saveToFile(const std::string& fileName, const std::string& title);
+    void addList(const std::string& title);
+    bool searchList(std::string search);       
+    void display() const;            
+    void clear();   
 };
+
+#endif

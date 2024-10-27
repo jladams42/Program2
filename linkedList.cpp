@@ -1,62 +1,62 @@
 #include "linkedList.h"
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <ctime>
 
-//using namespace std;
 
+using namespace std;
 // Constructor for Task
 // template <typename T>
 // Task<T>::Task(T desc) : description(desc), next(nullptr) {}
 
-// // Constructor for ToDoList
-// ToDoList::ToDoList() : head(nullptr) {}
+// // Constructor for DataList
+// DataList::DataList() : head(nullptr) {}
 
 // Destructor to free memory
-ToDoList::~ToDoList() {
+DataList::~DataList() {
     clear();
 }
 
 // Function to load tasks from file into the linked list
-void ToDoList::loadFromFile(const std::string& fileName) {
-    std::ifstream inFile(fileName);
+void DataList::loadFromFile(const std::string& fileName) {
+    std::ifstream inFile("lists.txt");
     if (!inFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
 
-    std::string description;
-    while (getline(inFile, description)) {
-        addTask(description);
+    std::string title;
+    while (getline(inFile, title)) {
+        addList(title);
     }
 
     inFile.close();
 }
 
 // Function to save the linked list to a file (append mode)
-void ToDoList::saveToFile(const std::string& fileName) {
+void DataList::saveToFile(const std::string& fileName, const std::string& title) {
     std::ofstream outFile(fileName);
-
     if (!outFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
 
-    Task<std::string>* current = head;
-
+    List<std::string>* current = head;
     while (current != nullptr) {
-        bool taskExists = false;
-        Task<std::string>* check = head;
+        bool listExists = false;
+        List<std::string>* check = head;
 
         while (check != current) {
             if (*current == *check){
-                taskExists = true;
+                listExists = true;
                 break;
             }
             check = check->next;
         }
 
-        if (!taskExists) {
-            outFile << current->description << std::endl; 
+        if (!listExists) {
+            outFile << current->title << std::endl; 
         }
         current = current->next;
     }
@@ -67,86 +67,67 @@ void ToDoList::saveToFile(const std::string& fileName) {
 }
 
 // Function to add a new task to the linked list
-void ToDoList::addTask(const std::string& description) {
-    Task<std::string>* temp = head;
-    while (temp != nullptr){
-        if (temp->description == description) {
-            std::cout << "Task already exists: " << description << std:: endl;
-            return;
-        }
-        temp = temp->next;
-    }
-
-    Task<std::string>* newTask = new Task<std::string>(description);
+void DataList::addList(const std::string& title) {
+    List<std::string>* newList = new List<std::string>(title);
 
     if (head == nullptr) {
-        head = newTask;
+        head = newList;
     } else {
-        Task<std::string>* temp = head;
+        List<std::string>* temp = head;
         while (temp->next != nullptr) {
             temp = temp->next;
         }
-        temp->next = newTask;
+        temp->next = newList;
     }
 }
 
 // Function to display the linked list
-void ToDoList::display() const {
-    Task<std::string>* temp = head;
+void DataList::display() const {
+    int i = 1;
+    List<std::string>* temp = head;
     if (temp == nullptr) {
-        std::cout << "Your to-do list is empty!" << std::endl;
+        std::cout << "You have no lists!" << std::endl;
         return;
     }
-    std::cout << "\n=============\n";
-    std::cout << "\nTODO LIST\n";
     while (temp != nullptr) {
-        std::cout << "- " << temp->description << std::endl;
+        std::cout << i << ". "<< temp->title << std::endl;
         temp = temp->next;
+        i++;
     }
 }
 
 // Function to clear the linked list and free memory
-void ToDoList::clear() {
+void DataList::clear() {
     while (head != nullptr) {
-        Task<std::string>* temp = head;
+        List<std::string>* temp = head;
         head = head->next;
         delete temp;
     }
 }
 
-void ToDoList::searchTasks() {
-    if (head == nullptr) {
-        std::cout << "The task list is empty." << std::endl;
-        return;
-    }
-
-    Task<std::string>* current = head;
-    Task<std::string>* prev = nullptr;
+bool DataList::searchList(std::string search) {
+    List<std::string>* current = head;
+    bool found = false;
 
     while (current != nullptr) {
-        std::cout << "Task: " << current->description << std::endl;
-        std::cout << "Do you wish to delete this task? (y/n): ";
-        char response;
-        std:: cin >> response;
-
-        if (response == 'y' || response == 'Y') {
-            if(prev == nullptr){
-                // For if the head needs deletion
-                head = current->next;
-                delete current;
-                current = head;
-            } else {
-                // Middle or the last task deletion
-                prev->next = current->next;
-                delete current;
-                current = prev->next;
-            }
-            std::cout << "Task deleted." << std::endl;
-        } else {
-            // Move on to the next task
-            prev = current;
-            current = current->next;
+        if (current->title == search) {
+            cout << "This list matches your list " << current->title << endl;
+            found = true;
         }
+        current = current->next;
     }
-}
 
+    if (!found) {
+        cout << "No matches were found. The list doesn't exist. Creating a new one...\n";
+        std::ofstream file(search + ".txt");
+        if(file.is_open()) {
+            cout << "Created a new list called " << search << endl;
+            file.close();
+        } else {
+            cerr << "Error creating the list!\n";
+        }
+    return false;
+    }
+
+return true;
+}

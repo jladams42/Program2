@@ -66,12 +66,15 @@ int main() {
 
             case 3: {
                 if(!activeList.empty()) {
-                    string task;
+                    string task,priority,status;
+                    status = "Incomplete";
                     cout << "What task would you like to add?\n";
                     getline(cin, task);
+                    cout << "What is the task priority?\n";
+                    getline(cin, priority);
                     todo.loadFromFile(activeList + ".txt");
                     cout << "The task you are adding is: " << task;
-                    todo.addTask(task);
+                    todo.addTask(task,priority,status);
                     todo.saveToFile(activeList + ".txt");
                 } else {
                     cout << "\nYou have no list selected! Please choose a list.\n";

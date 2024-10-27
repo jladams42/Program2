@@ -1,62 +1,57 @@
 #include "dataList.h"
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <ctime>
 
-
-using namespace std;
-// Constructor for Task
-// template <typename T>
-// Task<T>::Task(T desc) : description(desc), next(nullptr) {}
-
-// // Constructor for DataList
-// DataList::DataList() : head(nullptr) {}
+//using namespace std;
 
 // Destructor to free memory
-DataList::~DataList() {
+ToDoList::~ToDoList() {
     clear();
 }
 
 // Function to load tasks from file into the linked list
-void DataList::loadFromFile(const std::string& fileName) {
-    std::ifstream inFile("lists.txt");
+void ToDoList::loadFromFile(const std::string& fileName) {
+    std::ifstream inFile(fileName);
     if (!inFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
 
-    std::string title;
-    while (getline(inFile, title)) {
-        addList(title);
-    }
+    std::string description, priority, status;
+    while (getline(inFile, description) && getline(inFile, priority) && getline(inFile, status)) {
+        addTask(description, priority, status);
+    } 
 
     inFile.close();
 }
 
 // Function to save the linked list to a file (append mode)
-void DataList::saveToFile(const std::string& fileName, const std::string& title) {
+void ToDoList::saveToFile(const std::string& fileName) {
     std::ofstream outFile(fileName);
+
     if (!outFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
 
-    List<std::string>* current = head;
+    Task<std::string>* current = head;
+
     while (current != nullptr) {
-        bool listExists = false;
-        List<std::string>* check = head;
+        bool taskExists = false;
+        Task<std::string>* check = head;
 
         while (check != current) {
             if (*current == *check){
-                listExists = true;
+                taskExists = true;
                 break;
             }
             check = check->next;
         }
 
-        if (!listExists) {
-            outFile << current->title << std::endl; 
+        if (!taskExists) {
+            outFile << current->description << std::endl;
+            outFile << current->priority << std::endl;
+            outFile << current->status << std::endl; 
         }
         current = current->next;
     }
@@ -67,67 +62,87 @@ void DataList::saveToFile(const std::string& fileName, const std::string& title)
 }
 
 // Function to add a new task to the linked list
-void DataList::addList(const std::string& title) {
-    List<std::string>* newList = new List<std::string>(title);
+void ToDoList::addTask(const std::string& description, std::string priority, std::string status) {
+    Task<std::string>* temp = head;
+    while (temp != nullptr){
+        if (temp->description == description) {
+            std::cout << "Task already exists: " << description << std:: endl;
+            return;
+        }
+        temp = temp->next;
+    }
+
+
+    Task<std::string>* newTask = new Task<std::string>(description, priority, status);
 
     if (head == nullptr) {
-        head = newList;
+        head = newTask;
     } else {
-        List<std::string>* temp = head;
+        Task<std::string>* temp = head;
         while (temp->next != nullptr) {
             temp = temp->next;
         }
-        temp->next = newList;
+        temp->next = newTask;
     }
 }
 
 // Function to display the linked list
-void DataList::display() const {
-    int i = 1;
-    List<std::string>* temp = head;
-    if (temp == nullptr) {
-        std::cout << "You have no lists!" << std::endl;
+void ToDoList::display() const {
+    Task<std::string>* current = head;
+    if (current == nullptr) {
+        std::cout << "Your to-do list is empty!" << std::endl;
         return;
     }
-    while (temp != nullptr) {
-        std::cout << i << ". "<< temp->title << std::endl;
-        temp = temp->next;
-        i++;
+    std::cout << "\n=============\n";
+    std::cout << "\nTODO LIST\n";
+    while (current != nullptr) {
+        std::cout << *current << "\n"; 
+        current = current->next;
     }
 }
 
 // Function to clear the linked list and free memory
-void DataList::clear() {
+void ToDoList::clear() {
     while (head != nullptr) {
-        List<std::string>* temp = head;
+        Task<std::string>* temp = head;
         head = head->next;
         delete temp;
     }
 }
 
-bool DataList::searchList(std::string search) {
-    List<std::string>* current = head;
-    bool found = false;
+void ToDoList::searchTasks() {
+    if (head == nullptr) {
+        std::cout << "The task list is empty." << std::endl;
+        return;
+    }
+
+    Task<std::string>* current = head;
+    Task<std::string>* prev = nullptr;
 
     while (current != nullptr) {
-        if (current->title == search) {
-            cout << "This list matches your list " << current->title << endl;
-            found = true;
-        }
-        current = current->next;
-    }
+        std::cout << "Task: " << current->description << std::endl;
+        std::cout << "Do you wish to delete this task? (y/n): ";
+        char response;
+        std:: cin >> response;
 
-    if (!found) {
-        cout << "No matches were found. The list doesn't exist. Creating a new one...\n";
-        std::ofstream file(search + ".txt");
-        if(file.is_open()) {
-            cout << "Created a new list called " << search << endl;
-            file.close();
+        if (response == 'y' || response == 'Y') {
+            if(prev == nullptr){
+                // For if the head needs deletion
+                head = current->next;
+                delete current;
+                current = head;
+            } else {
+                // Middle or the last task deletion
+                prev->next = current->next;
+                delete current;
+                current = prev->next;
+            }
+            std::cout << "Task deleted." << std::endl;
         } else {
-            cerr << "Error creating the list!\n";
+            // Move on to the next task
+            prev = current;
+            current = current->next;
         }
-    return false;
     }
-
-return true;
 }
+
