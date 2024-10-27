@@ -34,11 +34,22 @@ struct Task {
         }
         return priority < other.priority;
     }
+
+    bool operator>(const Task& other) const {
+    if (priority == other.priority) {
+        return description > other.description;
+    }
+    return priority > other.priority;
+    }
 };
 
 class ToDoList {
 private:
     Task<std::string>* head;
+
+    Task<std::string>* getTail(Task<std::string>* node);
+    Task<std::string>* partition(Task<std::string>* low, Task<std::string>* high, Task<std::string>** newHead, Task<std::string>** newEnd);
+    Task<std::string>* quickSortRecurse(Task<std::string>* head, Task<std::string>* end);
 
 public:
     ToDoList() : head(nullptr) {};  // Constructor
@@ -47,9 +58,12 @@ public:
     void loadFromFile(const std::string& fileName); // Load tasks from file
     void saveToFile(const std::string& fileName); // Save task to file
     void addTask(const std::string& description, std::string priority, std::string status); // Add a task to the list
-    void searchTasks();
-    void display() const;   // Display the list
-    void clear();   // Clear the list
+    void deleteTask();
+    void completeTask();
+    void display() const;   // Display the task list
+    void clear();   // Clear the task
+
+    friend void quickSort(ToDoList& list);
 };
 
 #endif
