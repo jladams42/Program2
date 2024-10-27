@@ -9,6 +9,9 @@ struct Task {
     Task* next;
 
     Task(T desc) : description(desc), next(nullptr) {}; // Constructor for Task
+    bool operator==(const Task& other) const {
+        return description == other.description;
+    }
 };
 
 class ToDoList {

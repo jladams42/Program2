@@ -36,15 +36,34 @@ void DataList::loadFromFile(const std::string& fileName) {
 
 // Function to save the linked list to a file (append mode)
 void DataList::saveToFile(const std::string& fileName, const std::string& title) {
-    std::ofstream outFile(fileName, std::ios::app);
+    std::ofstream outFile(fileName);
     if (!outFile) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
 
-    outFile << title << std::endl;
+    List<std::string>* current = head;
+    while (current != nullptr) {
+        bool listExists = false;
+        List<std::string>* check = head;
+
+        while (check != current) {
+            if (*current == *check){
+                listExists = true;
+                break;
+            }
+            check = check->next;
+        }
+
+        if (!listExists) {
+            outFile << current->title << std::endl; 
+        }
+        current = current->next;
+    }
+
 
     outFile.close();
+    std::cout << "Tasks have been saved!" << std::endl;
 }
 
 // Function to add a new task to the linked list

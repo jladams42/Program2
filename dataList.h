@@ -11,6 +11,9 @@ struct List {
     List* next;
 
     List(T title) : title(title), next(nullptr) {};
+    bool operator==(const List& other) const {
+        return title == other.title;
+    }
 };
 
 class DataList {

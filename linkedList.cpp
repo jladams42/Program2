@@ -44,9 +44,23 @@ void ToDoList::saveToFile(const std::string& fileName) {
     Task<std::string>* current = head;
 
     while (current != nullptr) {
-        outFile << current->description << std::endl;
+        bool taskExists = false;
+        Task<std::string>* check = head;
+
+        while (check != current) {
+            if (*current == *check){
+                taskExists = true;
+                break;
+            }
+            check = check->next;
+        }
+
+        if (!taskExists) {
+            outFile << current->description << std::endl; 
+        }
         current = current->next;
     }
+
 
     outFile.close();
     std::cout << "Tasks have been saved!" << std::endl;
@@ -54,6 +68,15 @@ void ToDoList::saveToFile(const std::string& fileName) {
 
 // Function to add a new task to the linked list
 void ToDoList::addTask(const std::string& description) {
+    Task<std::string>* temp = head;
+    while (temp != nullptr){
+        if (temp->description == description) {
+            std::cout << "Task already exists: " << description << std:: endl;
+            return;
+        }
+        temp = temp->next;
+    }
+
     Task<std::string>* newTask = new Task<std::string>(description);
 
     if (head == nullptr) {

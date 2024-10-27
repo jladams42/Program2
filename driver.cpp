@@ -70,6 +70,7 @@ int main() {
                     cout << "What task would you like to add?\n";
                     getline(cin, task);
                     todo.loadFromFile(activeList + ".txt");
+                    cout << "The task you are adding is: " << task;
                     todo.addTask(task);
                     todo.saveToFile(activeList + ".txt");
                 } else {
