@@ -16,7 +16,7 @@ void ToDoList::loadFromFile(const std::string& fileName) {
         std::cerr << "File could not be opened!" << std::endl;
         return;
     }
-
+    // Gets each line by 3s to separate them into task nodes. 
     std::string description, priority, status;
     while (getline(inFile, description) && getline(inFile, priority) && getline(inFile, status)) {
         addTask(description, priority, status);
@@ -35,7 +35,8 @@ void ToDoList::saveToFile(const std::string& fileName) {
     }
 
     Task<std::string>* current = head;
-
+    // Loops through the tasks to first check that its not empty and then to check if the task exists in the file
+    // If it doesn not, it gets added and saved to the file
     while (current != nullptr) {
         bool taskExists = false;
         Task<std::string>* check = head;
@@ -109,7 +110,7 @@ void ToDoList::clear() {
         delete temp;
     }
 }
-
+// Lets the user cycle through the tasks to choose to delete each one and then goes to the next node
 void ToDoList::deleteTask() {
     if (head == nullptr) {
         std::cout << "The task list is empty." << std::endl;
@@ -145,7 +146,7 @@ void ToDoList::deleteTask() {
         }
     }
 }
-
+// Checks the current status of a task and cycles through to ask the user if they wish to mark it as completed
 void ToDoList::completeTask() {
     if (head == nullptr) {
         std::cout << "The task list is empty." << std::endl;
@@ -169,18 +170,18 @@ void ToDoList::completeTask() {
         current = current->next;
     }
 }
-
+// Passes in our list to our quicksort algoirthm to sort by priority
 void quickSort(ToDoList& list) {
     list.head = list.quickSortRecurse(list.head, list.getTail(list.head));
 }
-
+// Gets the last node of the list
 Task<std::string>* ToDoList::getTail(Task<std::string>* node) {
     while (node && node->next) {
         node = node->next;
     }
     return node;
 }
-
+// Sets up a partition for the linked list around a pivot
 Task<std::string>* ToDoList::partition(Task<std::string>* low, Task<std::string>* high, Task<std::string>** newHead, Task<std::string>** newEnd) {
     Task<std::string>* pivot = high;
     Task<std::string>* prev = nullptr, *cur = low, *tail = pivot;
@@ -203,7 +204,7 @@ Task<std::string>* ToDoList::partition(Task<std::string>* low, Task<std::string>
     *newEnd = tail;
     return pivot;
 }
-
+// Recursively calls the quicksort until the list is sorted
 Task<std::string>* ToDoList::quickSortRecurse(Task<std::string>* head, Task<std::string>* end) {
     if (!head || head == end){
         return head;

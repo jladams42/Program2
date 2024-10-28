@@ -18,13 +18,14 @@ void displayMenu() {
 
 int main() {
     string x;
-    ToDoList todo;
-    DataList lists;
+    ToDoList todo; // Intialize our todo list
+    DataList lists; // Initialize our list of lists
 
-    lists.loadFromFile("lists.txt");
+    lists.loadFromFile("lists.txt"); // Loads our list list from a text file
     bool inUse = true;
-    string activeList;
+    string activeList; // Holds the string for the active list
 
+    // While inUse - we loop through the menu over and over until the exit condition is met
     while (inUse) {
         if(!activeList.empty()) {
             cout << "\nCurrent list is: " << activeList << endl;
@@ -43,7 +44,9 @@ int main() {
                 lists.display();
                 cout << "Type the name of your list:\n";
                 cin >> listName;
-                bool isFound = lists.searchList(listName);
+                bool isFound = lists.searchList(listName); // Searches to see if the list exits
+
+                // If the list isn't found it creates it, if not loads the already created list
                 if(!isFound){
                     lists.addList(listName);
                     lists.saveToFile("lists.txt", listName);
@@ -54,7 +57,7 @@ int main() {
                 }
                 break;
             }
-
+            // Sorts list by priority for any given list and displays it
             case 2: {
                 if(!activeList.empty()) {
                     cout << "Sorting list by priority...\n" << endl;
@@ -66,7 +69,7 @@ int main() {
                 }
                 break;
             }
-
+            // Adds a task of the users choosing and asks for priority of the task
             case 3: {
                 if(!activeList.empty()) {
                     string task,priority,status;
@@ -84,7 +87,8 @@ int main() {
                 }
                 break;
             }
-
+            // Allows the user to cycle through each task and ask if they want to mark it completed - 
+            // without deleting the task for later viewing.
             case 4: {
                 if(!activeList.empty()) {
                     todo.completeTask();
@@ -94,8 +98,7 @@ int main() {
                 }
                 break;
             }
-
-
+            // Allows the user to cycle through tasks to delete them if they so choose.
             case 5: {
                 if(!activeList.empty()) {
                     todo.deleteTask();
@@ -105,12 +108,12 @@ int main() {
                 }
                 break;
             }
-
+            // Closes out of the program gracefully
             case 6: {
                 inUse = false;
                 break;
             }
-
+            // Checks for invalid inputs for the menu selection.
             default: {
                 cout << "Invalid option! Please make another choice.\n";
                 cin.clear();

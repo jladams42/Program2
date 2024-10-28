@@ -6,12 +6,6 @@
 
 
 using namespace std;
-// Constructor for Task
-// template <typename T>
-// Task<T>::Task(T desc) : description(desc), next(nullptr) {}
-
-// // Constructor for DataList
-// DataList::DataList() : head(nullptr) {}
 
 // Destructor to free memory
 DataList::~DataList() {
