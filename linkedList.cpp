@@ -62,8 +62,15 @@ void DataList::saveToFile(const std::string& fileName, const std::string& title)
 
 // Function to add a new task to the linked list
 void DataList::addList(const std::string& title) {
-    List<std::string>* newList = new List<std::string>(title);
+    List<std::string>* temp = head;
+    while(temp != nullptr){
+        if (temp->title == title){
+            return;
+        }
+        temp = temp->next;
+    }
 
+    List<std::string>* newList = new List<std::string>(title);
     if (head == nullptr) {
         head = newList;
     } else {
@@ -99,6 +106,8 @@ void DataList::clear() {
     }
 }
 
+// Searches through the linked list to check the contents of the 'title' attribute and if it matches
+// it returns true to ensure no duplicate lists are added
 bool DataList::searchList(std::string search) {
     List<std::string>* current = head;
     bool found = false;
