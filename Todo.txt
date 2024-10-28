@@ -1,9 +1,0 @@
-Run to store
-1
-Complete
-Run to gym
-3
-Incomplete
-Make a list
-4
-Incomplete
