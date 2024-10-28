@@ -19,7 +19,7 @@ struct Task {
     bool operator==(const Task& other) const {
         return description == other.description;
     }
-
+    // Friend function to display the Task node
     friend std::ostream& operator<<(std::ostream& os, const Task& task){
         os << "Description: " << task.description
             << "\nPriority: " << task.priority
@@ -27,14 +27,14 @@ struct Task {
             << "\n";
         return os;
     }
-
+    // Overload operator for priority comparison
     bool operator<(const Task& other) const {
         if (priority == other.priority) {
             return description < other.description;
         }
         return priority < other.priority;
     }
-
+    // Overload operator for priority comparison
     bool operator>(const Task& other) const {
     if (priority == other.priority) {
         return description > other.description;
@@ -46,10 +46,10 @@ struct Task {
 class ToDoList {
 private:
     Task<std::string>* head;
-
-    Task<std::string>* getTail(Task<std::string>* node);
-    Task<std::string>* partition(Task<std::string>* low, Task<std::string>* high, Task<std::string>** newHead, Task<std::string>** newEnd);
-    Task<std::string>* quickSortRecurse(Task<std::string>* head, Task<std::string>* end);
+    // List of definitions used by the ToDoList Class for the quicksort algorithm
+    Task<std::string>* getTail(Task<std::string>* node); // Helper function to get the tail node
+    Task<std::string>* partition(Task<std::string>* low, Task<std::string>* high, Task<std::string>** newHead, Task<std::string>** newEnd); // Helper function to divide list into 2 parts
+    Task<std::string>* quickSortRecurse(Task<std::string>* head, Task<std::string>* end); // Used to call the sorting algoirhtm recursively until properly sorted
 
 public:
     ToDoList() : head(nullptr) {};  // Constructor
